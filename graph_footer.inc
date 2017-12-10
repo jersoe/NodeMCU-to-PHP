@@ -1,7 +1,7 @@
 ]);
 
         var options = {
-          title: 'Temperature',
+          title: 'Temperature - <?php echo $date;?>',
           curveType: 'function',
           legend: { position: 'bottom' }
         };
