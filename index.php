@@ -63,8 +63,9 @@ if (!empty($_GET["temp"])) {
 	
 	include("graph_header.inc");
 
-	$sql = "SELECT a.temperature, b.humidity, a.Timestamp FROM temperature a, humidity b where a.temp_measurement_id=b.humidity_measurement_id";
+	$sql = "SELECT a.temperature, b.humidity, a.Timestamp FROM temperature a, humidity b where a.temp_measurement_id=b.humidity_measurement_id and DATE(a.Timestamp) = CURDATE()";
 	$firstrow = true;
+	$date = null;
 	
 	foreach($dbh->query($sql) as $row){
 		if (!$firstrow) {
@@ -72,14 +73,19 @@ if (!empty($_GET["temp"])) {
 		}
 		$firstrow=false;
 		
-		//Convert Commie units to Freedom units
-		$fahrenheit = (9/5)*$row['temperature']+32;
+		$celcius = $row['temperature'];
+		$fahrenheit = (9/5)*$celcius+32;
 		
-		echo "['{$row['Timestamp']}',".$fahrenheit.",{$row['humidity']}]";
+		$datetime = explode(" ",$row['Timestamp']);
+		$date = $datetime[0];
+		$time = $datetime[1];
+		
+		echo "['".$time."',".$fahrenheit.",{$row['humidity']},".$celcius."]";
 	}
 	
 	include("graph_footer.inc");	
 }
 ?>
+
 
 
